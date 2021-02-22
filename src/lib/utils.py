@@ -8,8 +8,7 @@ import glob
 from PIL import Image
 from tqdm import tqdm
 import lib.jpeg as jpg
-from skimage.measure import compare_ssim, compare_psnr, compare_nrmse
-
+from skimage.metrics import peak_signal_noise_ratio, normalized_root_mse
 
 exp_chart_folder = None
 model_weights_folder1 = None
@@ -29,10 +28,8 @@ class CustomMetric:
         for index in range(0, batch_size):
             batch_y_r = batch_y[index,:,:,0]
             predictions_r = predictions[index,:,:,0]
-            self.buffer_psnr = np.concatenate((self.buffer_psnr, 
-            compare_psnr( batch_y_r, predictions_r, data_range=1)), axis=None) 
-            self.buffer_nrmse = np.concatenate((self.buffer_nrmse, 
-            compare_nrmse( batch_y_r, predictions_r)), axis=None)
+            self.buffer_psnr = np.concatenate((self.buffer_psnr, peak_signal_noise_ratio(batch_y_r, predictions_r, data_range=1)), axis=None) 
+            self.buffer_nrmse = np.concatenate((self.buffer_nrmse, normalized_root_mse(batch_y_r, predictions_r)), axis=None)
             
     def result(self):
         return np.mean(self.buffer_psnr), np.mean(self.buffer_nrmse)
@@ -174,21 +171,21 @@ def draw_chart():
   
     axs[0].plot(dict_chart_data["epoch"], dict_chart_data["Train_MSE"], linewidth=2, color="orange", label="Train_MSE")
     axs[0].plot(dict_chart_data["epoch"], dict_chart_data["Valid_MSE_1"], linewidth=2, color="blue", label="Valid_MSE_1")
-    axs[0].plot(dict_chart_data["epoch"], dict_chart_data["Valid_MSE_2"], linewidth=2, color="green", label="Valid_MSE_2")
-    axs[0].plot(dict_chart_data["epoch"], dict_chart_data["Valid_MSE_3"], linewidth=2, color="red", label="Valid_MSE_3")
-    axs[0].legend(frameon=False, loc='upper center', ncol=4)
+#     axs[0].plot(dict_chart_data["epoch"], dict_chart_data["Valid_MSE_2"], linewidth=2, color="green", label="Valid_MSE_2")
+#     axs[0].plot(dict_chart_data["epoch"], dict_chart_data["Valid_MSE_3"], linewidth=2, color="red", label="Valid_MSE_3")
+    axs[0].legend(frameon=False, loc='upper center', ncol=2)
     #annot_max(axs[0], np.asarray(dict_chart_data["epoch"]), np.asarray(dict_chart_data["Valid_MSE"]) )
 
     axs[1].plot(dict_chart_data["epoch"], dict_chart_data["PSNR_1"], linewidth=2, color="blue", label="PSNR_1")
-    axs[1].plot(dict_chart_data["epoch"], dict_chart_data["PSNR_2"], linewidth=2, color="green", label="PSNR_2")
-    axs[1].plot(dict_chart_data["epoch"], dict_chart_data["PSNR_3"], linewidth=2, color="red", label="PSNR_3")
-    axs[1].legend(frameon=False, loc='upper center', ncol=3)
+#     axs[1].plot(dict_chart_data["epoch"], dict_chart_data["PSNR_2"], linewidth=2, color="green", label="PSNR_2")
+#     axs[1].plot(dict_chart_data["epoch"], dict_chart_data["PSNR_3"], linewidth=2, color="red", label="PSNR_3")
+    axs[1].legend(frameon=False, loc='upper center', ncol=1)
     #annot_max(axs[1], np.asarray(dict_chart_data["epoch"]), np.asarray(dict_chart_data["PSNR_1"]), op="max")
 
     axs[2].plot(dict_chart_data["epoch"], dict_chart_data["NRMSE_1"], linewidth=2, color="blue", label="NRMSE_1")
-    axs[2].plot(dict_chart_data["epoch"], dict_chart_data["NRMSE_2"], linewidth=2, color="green", label="NRMSE_2")
-    axs[2].plot(dict_chart_data["epoch"], dict_chart_data["NRMSE_3"], linewidth=2, color="red", label="NRMSE_3")
-    axs[2].legend(frameon=False, loc='upper center', ncol=3)
+#     axs[2].plot(dict_chart_data["epoch"], dict_chart_data["NRMSE_2"], linewidth=2, color="green", label="NRMSE_2")
+#     axs[2].plot(dict_chart_data["epoch"], dict_chart_data["NRMSE_3"], linewidth=2, color="red", label="NRMSE_3")
+    axs[2].legend(frameon=False, loc='upper center', ncol=1)
     #annot_max(axs[4], np.asarray(dict_chart_data["epoch"]), np.asarray(dict_chart_data["NRMSE_1"]))
 
     plt.show()

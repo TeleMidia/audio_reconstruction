@@ -75,7 +75,7 @@ class FPN_RFB_TDM(Model):
         up1 = self.upsample_2x(side1)
 
         #14 -> 28
-        side2 = self.side_conv_2(down4)
+        side2 = self.side_conv_2(down4)    
         add1 = tf.keras.layers.concatenate([side2,  up1], axis=3)
         up2 = self.upsample_2x(add1)        
 
