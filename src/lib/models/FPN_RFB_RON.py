@@ -4,9 +4,9 @@ from tensorflow.keras import Model
 from tensorflow.keras.layers import Input, Conv2D, BatchNormalization, ReLU, Conv2DTranspose, MaxPool2D, UpSampling2D
 from tensorflow.keras.activations import relu
 
-class FPN_RBF_RON(Model):
+class FPN_RFB_RON(Model):
     def __init__(self):
-        super(FPN_RBF_RON, self).__init__()
+        super(FPN_RFB_RON, self).__init__()
 
         initializer = tf.keras.initializers.GlorotNormal(seed=0)
         self.max_pool = MaxPool2D(pool_size=(2, 2), strides=2, padding='same')

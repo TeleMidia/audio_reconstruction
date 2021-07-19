@@ -3,9 +3,9 @@ import tensorflow as tf
 from tensorflow.keras import Model
 from tensorflow.keras.layers import Input, Conv2D, BatchNormalization, ReLU, Conv2DTranspose, MaxPool2D
 
-class LinkNet_v2(Model):
+class LinkNet(Model):
     def __init__(self):
-        super(LinkNet_v2, self).__init__()
+        super(LinkNet, self).__init__()
 
         initializer = tf.keras.initializers.GlorotNormal(seed=0)
         self.conv_1 = self.Conv2dBatchLayer(32,3)
