@@ -28,11 +28,11 @@ class CustomMetric:
         for index in range(0, batch_size):
             batch_y_r = batch_y[index,:,:,0]
             predictions_r = predictions[index,:,:,0]
-            self.buffer_psnr = np.concatenate((self.buffer_psnr, peak_signal_noise_ratio(batch_y_r, predictions_r, data_range=1)), axis=None) 
+            self.buffer_psnr = np.concatenate((self.buffer_psnr, peak_signal_noise_ratio(batch_y_r, predictions_r, data_range=1)), axis=None)
             self.buffer_nrmse = np.concatenate((self.buffer_nrmse, normalized_root_mse(batch_y_r, predictions_r)), axis=None)
             
     def result(self):
-        return np.mean(self.buffer_psnr), np.mean(self.buffer_nrmse)
+        return np.mean(self.buffer_psnr[~np.isinf(self.buffer_psnr)]), np.mean(self.buffer_nrmse)
 
     def reset_states(self):
         self.buffer_psnr = []
