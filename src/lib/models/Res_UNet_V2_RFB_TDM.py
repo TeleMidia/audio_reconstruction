@@ -107,7 +107,3 @@ class Res_UNet_V2_RFB_TDM(Model):
         last_conv = self.last_conv(conv11)
 
         return tf.keras.layers.Subtract()([input, last_conv])
-
-model = Res_UNet_V2_RFB_TDM()
-model.build((None,128,128,1))
-print(model.summary())
