@@ -4,9 +4,9 @@ from tensorflow.keras import Model
 from tensorflow.keras.layers import Input, Conv2D, BatchNormalization, ReLU, Conv2DTranspose, MaxPool2D
 from tensorflow.keras.activations import relu
 
-class UNet(Model):
+class UNet_RFB_TDM(Model):
     def __init__(self):
-        super(UNet, self).__init__()
+        super(UNet_RFB_TDM, self).__init__()
 
         initializer = tf.keras.initializers.GlorotNormal(seed=0)
         self.max_pool = MaxPool2D(pool_size=(2, 2), strides=2, padding='same')
