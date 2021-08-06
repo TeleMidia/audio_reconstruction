@@ -88,8 +88,8 @@ pip install -r requirements.txt
 Os seguintes notebooks, scripts e modelos foram desenvolvidos para o dataset.
 
 1. [`features_extraction_FMA.ipynb`](features_extraction_FMA.ipynb): realiza todo processo de fragmentação dos áudios e salva os respectivos espectrogramas.
-2. [`experiments`]('src/experiments'): modulo com os notebooks de treinamentos com os autoencoders testados para a tarefa.
-3. [`lib`](src/lib): modulo com todos os modelos e funcões de avaliação implementadas até então.
+2. [`experiments`](https://github.com/TeleMidia/audio_reconstruction/tree/main/src/experiments): modulo com os notebooks de treinamentos com os autoencoders testados para a tarefa.
+3. [`lib`](https://github.com/TeleMidia/audio_reconstruction/tree/main/src/lib): modulo com todos os modelos e funcões de avaliação implementadas até então.
 
 ## Dataset
 
