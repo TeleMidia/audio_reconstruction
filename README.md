@@ -88,7 +88,7 @@ pip install -r requirements.txt
 Os seguintes notebooks, scripts e modelos foram desenvolvidos para o dataset.
 
 1. [`features_extraction_FMA.ipynb`](features_extraction_FMA.ipynb): realiza todo processo de fragmentação dos áudios e salva os respectivos espectrogramas.
-2. [`experiments`](src/experiments): modulo com os notebooks de treinamentos com os autoencoders testados para a tarefa.
+2. [`experiments`]('src/experiments'): modulo com os notebooks de treinamentos com os autoencoders testados para a tarefa.
 3. [`lib`](src/lib): modulo com todos os modelos e funcões de avaliação implementadas até então.
 
 ## Dataset
@@ -155,7 +155,7 @@ Dado a relação de complexidade de timbres entre os gêneros foi efetuado a seg
 ```
 
 O processo de fragmentação é segmentando em 3 etapas principais, como mostra a seguinte imagem: 
-![](figs/partitioning.png)
+![](https://github.com/TeleMidia/audio_reconstruction/blob/main/figs/partitioning.png?raw=true)
 
 ##### Etapa 1
 Cada áudio gerou um espectrograma na seguinte dimensão de tempo e frequência respectivamente [7500, 128].
@@ -200,7 +200,7 @@ Os dados foram salvos em arquivos Numpy (.npy), subtipo float 32 bits, o que pos
 
 O processo de  _Audio Inpainting_ adotado neste trabalho consiste em 2 etapas principais, reconstrução e sintetização. Como descrito na Figura a seguir, o passo de reconstrução consiste em codificar o audio fragmentado em espectrogramas e por conseguinte reconstruir-los atráves de um dos modelos de _autoencoders_ definidos para este projeto. Por fim, a etapa de sintetização é realizada através do algoritmo _Griffin-Lim_, para transformação do espectrograma reconstruído em onda.  
 
-![](figs/method.png)
+![](https://github.com/TeleMidia/audio_reconstruction/blob/main/figs/method.png?raw=true)
 
 
 ## Projetos Relacionados
