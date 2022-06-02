@@ -190,8 +190,6 @@ def draw_chart():
 
     plt.show()
 
-   
-
 def load_dataset(root_folder, replace_vec, load_gen=True, DCTScale=256, limit=None):
     
     IMG_SIZE = 200

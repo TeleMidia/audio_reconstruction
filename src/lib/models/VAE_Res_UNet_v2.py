@@ -1,12 +1,12 @@
 import tensorflow as tf
 
 from tensorflow.keras import Model
-from tensorflow.keras.layers import Input, Conv2D, BatchNormalization, ReLU, Conv2DTranspose, MaxPool2D, Dense, Lambda, Flatten, Reshape
+from tensorflow.keras.layers import Input, Conv2D, BatchNormalization, ReLU, Conv2DTranspose, MaxPool2D, Dense, Lambda, Flatten, Reshape, LeakyReLU
 from tensorflow.keras.activations import relu
 
-class VAE_UNet_v2(Model):
+class VAE_Res_UNet_v2(Model):
     def __init__(self):
-        super(VAE_UNet_v2, self).__init__()
+        super(VAE_Res_UNet_v2, self).__init__()
 
         initializer = tf.keras.initializers.GlorotNormal(seed=0)
         self.conv_1 = self.Conv2dBatchLayer(32,3)
@@ -22,22 +22,22 @@ class VAE_UNet_v2(Model):
         self.conv_6 = self.Conv2dBatchLayer(1024,3)
         
         self.flatten = Flatten()
-        self.first_dense = Dense(600, activation="relu", name='first_dense')
-        self.dense_mean = Dense(300, name = 'mu')
-        self.dense_var = Dense(300, name = 'log_var')
+        self.first_dense = Dense(1000, name='first_dense')
+        self.dense_mean = Dense(500, name = 'mu')
+        self.dense_var = Dense(500, name = 'log_var')
         self.samp_latent = Lambda(self.sampling, name='sampling_latent')
-        self.out_latent = Dense(16384, activation="relu", name = 'sampling')
+        self.out_latent = Dense(16384, activation=tf.nn.leaky_relu, name = 'sampling')
         self.rshp_latent = Reshape((4,4,1024))
 
-        self.up_1 = Conv2DTranspose(512, 3, activation='relu', strides=2, padding='same', kernel_initializer=initializer)
+        self.up_1 = Conv2DTranspose(512, 3, activation=tf.nn.leaky_relu, strides=2, padding='same', kernel_initializer=initializer)
         self.conv_7 = self.Conv2dBatchLayer(512,3)
-        self.up_2 = Conv2DTranspose(256, 3, activation='relu', strides=2, padding='same', kernel_initializer=initializer)
+        self.up_2 = Conv2DTranspose(256, 3, activation=tf.nn.leaky_relu, strides=2, padding='same', kernel_initializer=initializer)
         self.conv_8 = self.Conv2dBatchLayer(256,3)
-        self.up_3 = Conv2DTranspose(128, 3, activation='relu', strides=2, padding='same', kernel_initializer=initializer)
+        self.up_3 = Conv2DTranspose(128, 3, activation=tf.nn.leaky_relu, strides=2, padding='same', kernel_initializer=initializer)
         self.conv_9 = self.Conv2dBatchLayer(128,3)
-        self.up_4 = Conv2DTranspose(64, 3, activation='relu', strides=2, padding='same', kernel_initializer=initializer)
+        self.up_4 = Conv2DTranspose(64, 3, activation=tf.nn.leaky_relu, strides=2, padding='same', kernel_initializer=initializer)
         self.conv_10 = self.Conv2dBatchLayer(64,3)
-        self.up_5 = Conv2DTranspose(32, 3, activation='relu', strides=2, padding='same', kernel_initializer=initializer)
+        self.up_5 = Conv2DTranspose(32, 3, activation=tf.nn.leaky_relu, strides=2, padding='same', kernel_initializer=initializer)
         self.conv_11 = self.Conv2dBatchLayer(32, 3)
         self.last_conv = Conv2D(1, 3, strides=1, padding='same', kernel_initializer=initializer)
 
@@ -46,7 +46,7 @@ class VAE_UNet_v2(Model):
         result = tf.keras.Sequential()
         result.add(Conv2D(filters, kernel_size, strides=strides_, padding='same', kernel_initializer=initializer))
         result.add(BatchNormalization())
-        result.add(ReLU())
+        result.add(LeakyReLU())
         return result
     
     def sampling(self, args):
@@ -114,8 +114,9 @@ class VAE_UNet_v2(Model):
         concat5 = tf.keras.layers.concatenate([conv1, up5], axis=3) #128x128x64
         conv11 = self.conv_11(concat5) #128x128x32
         
-        output = self.last_conv(conv11)  #128x128x1
-
+        last_conv = self.last_conv(conv11)  #128x128x1
+        output = tf.keras.layers.Subtract()([input, last_conv])
+        
         return [mean_mu, log_var, output]
 
 
